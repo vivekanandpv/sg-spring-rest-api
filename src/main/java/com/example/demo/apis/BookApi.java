@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/books")
+//@CrossOrigin("http://localhost:5000")
+//@CrossOrigin({"http://localhost:5000", "http://localhost:5010"})
 public class BookApi {
     private final Vehicle vehicle;
     private final AppConfig config;
@@ -71,6 +73,19 @@ public class BookApi {
     @PatchMapping("{id}")
     public ResponseEntity<Book> updatePatch(@PathVariable int id, @RequestBody Book book) {
         book.setDescription("Updated!");
+        return ResponseEntity.ok(book);
+    }
+
+
+    @RequestMapping(path = "foo", method = RequestMethod.GET)
+    public ResponseEntity<?> fooGet() {
+        Book book = new Book();
+        book.setTitle("foo");
+        book.setDescription("Spring 5.0");
+        book.setAuthors(new String[] {"John Doe", "Martin"});
+        book.setPages(1200);
+        book.setPrice(2000.25);
+
         return ResponseEntity.ok(book);
     }
 }
