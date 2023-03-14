@@ -1,12 +1,26 @@
 package com.example.demo.apis;
 
+import com.example.demo.ancillary.Vehicle;
+import com.example.demo.config.AppConfig;
 import com.example.demo.models.Book;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/books")
 public class BookApi {
+    private final Vehicle vehicle;
+    private final AppConfig config;
+
+    @Value("${app.key}")
+    private String key;
+
+    public BookApi(Vehicle vehicle, AppConfig config) {
+        this.vehicle = vehicle;
+        this.config = config;
+    }
+
     @GetMapping
     public ResponseEntity<Book> get(@RequestParam(required = false) String title) {
         Book book = new Book();
@@ -15,6 +29,12 @@ public class BookApi {
         book.setAuthors(new String[] {"John Doe", "Martin"});
         book.setPages(1200);
         book.setPrice(2000.25);
+
+        vehicle.drive();
+
+        System.out.println(String.format("Key: %s", key));
+
+        System.out.println(String.format("API Key: %s; Username: %s; Password: %s", config.getApiKey(), config.getUsername(), config.getPassword()));
 
         return ResponseEntity.ok(book);
     }
